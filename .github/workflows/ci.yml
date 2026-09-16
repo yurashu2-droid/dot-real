@@ -1,0 +1,44 @@
+name: Verify MVP
+on:
+  push:
+    branches: [main, feat/browser-mvp]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm test
+      - run: npm run build
+      - name: Check module syntax
+        run: find src scripts -type f \( -name '*.js' -o -name '*.mjs' \) -exec node --check {} \;
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install playwright==1.55.0
+      - run: python -m playwright install --with-deps chromium
+      - name: Start local server
+        run: |
+          node scripts/serve.mjs > server.log 2>&1 &
+          for i in $(seq 1 30); do curl --fail --silent http://127.0.0.1:5173/ > /dev/null && break; sleep 1; done
+      - name: Browser acceptance (no model or camera required)
+        run: python tests/browser_smoke.py
+      - name: Download pinned real AI assets
+        run: npm run vendor
+      - name: Real model inference (not a mock)
+        run: python tests/ai_smoke.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: verification-evidence
+          path: |
+            test-results/
+            server.log
+          retention-days: 14
