@@ -40,6 +40,8 @@ with sync_playwright() as p:
     assert 100 < result['box']['area'] < 480*360*.88,result
     out=pathlib.Path('test-results');out.mkdir(exist_ok=True)
     (out/'real-ai.json').write_text(json.dumps(result,ensure_ascii=False,indent=2))
+    # The app is idle during this isolated worker test; remove its start overlay.
+    page.evaluate("document.getElementById('intro').hidden = true")
     page.locator('#preview').screenshot(path=str(out/'real-ai.png'))
     browser.close()
 print('PASS: real MediaPipe model initialized and produced a nontrivial object mask through the production worker.')

@@ -1,5 +1,20 @@
 # Verification record — 2026-09-17
 
+## GitHub Actions — actual execution passed
+
+The full **Verify MVP** run completed successfully, including real model inference:
+
+- Run: https://github.com/yurashu2-droid/dot-real/actions/runs/35120222664
+- Application commit: `bbdeac6e35b4ef43e581352b08cbd6a01331b250`
+- Source tree: `c34b26dbd30a007848e66ee4f0b56cb8da09d520` (byte-for-byte equal to the locally tested tree)
+- Node 22.23.2: **29 tests passed / 0 failed**, build and syntax checks passed.
+- Standard HTTP delivery in Chromium: desktop/mobile layout, actual image tracking, rendered palette pixels, PNG export, stale selection rejection, Stop, and camera-permission denial all passed without page exceptions.
+- Pinned MediaPipe JS/WASM/model/license download: passed.
+- **Real MediaPipe inference through the production worker: passed.** A generated rocket image was supplied to the model with a point prompt. The model returned a 8,471-pixel foreground component at `{x:200,y:100,width:99,height:153}`. This test did not supply the demo's known mask to the model or processor.
+- Artifact: `verification-evidence`, ID `10456108757`, includes screenshots, PNG export, real inference JSON, and server logs.
+
+This establishes runtime/API compatibility and successful segmentation of the test image, not accuracy on all real-world objects or performance on a phone. The independent demo tests still use a known initial silhouette; they are not evidence of AI inference.
+
 ## Local execution evidence
 
 - Node 22.16.0, native Node test runner: **29 tests passed / 0 failed**.
@@ -12,10 +27,10 @@
 - Found and fixed a staging-path bug in optional asset preparation; successful publication and preservation of old assets on download failure are regression-tested.
 - Synthetic demo receives its initial silhouette from its own drawing, **not AI**. Later frames go through the production image tracker.
 
-## Not verified in the local environment
+## Local limitations (resolved by remote CI where noted)
 
-- Real MediaPipe runtime/model download and actual inference: external network unavailable. `tests/ai_smoke.py` and a separate CI step are supplied to test these without substituting demo/manual masks.
-- Standard HTTP-served `tests/browser_smoke.py`: local browser navigation is administratively blocked. GitHub CI runs the normal URL path.
+- Real MediaPipe runtime/model download and actual inference: external network unavailable. **Subsequently passed in GitHub Actions**, as recorded above.
+- Standard HTTP-served `tests/browser_smoke.py`: local browser navigation is administratively blocked. **The normal URL path subsequently passed in GitHub Actions.**
 - Physical iPhone/Android camera, Safari-specific behavior, heat/battery, natural-image segmentation accuracy, and real-device throughput.
 - Public deployment/HTTPS endpoint: requires a successful hosting deployment, not just repository files.
 

@@ -39,4 +39,4 @@ Files: index.html, styles.css, src/{app,demo}.js, src/ui/renderer.js, assets/ico
 Files: scripts/{serve,build,vendor}.mjs, README.md, THIRD_PARTY_NOTICES.md, .github/workflows/{ci,pages}.yml, docs/verification.md.
 - [x] Build static output with `npm run build` and serve it via `npm run preview`.
 - [x] Run fresh unit tests, browser smoke and syntax checks; record exact evidence and remaining device/model tests.
-- [ ] Push verified source to feat/browser-mvp using GitHub tools, create a PR, and verify the remote tree.
+- [x] Push verified source to feat/browser-mvp using GitHub tools, create a PR, and verify the remote tree.
