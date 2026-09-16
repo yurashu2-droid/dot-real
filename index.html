@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f4f4ee"><meta name="description" content="カメラで選んだ物体だけをドット絵に。端末内で動く、ちいさな現実変換カメラ。">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>dot-real — 現実に、ドットを。</title>
+  <link rel="icon" href="./assets/icon.svg" type="image/svg+xml"><link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="shell">
+    <header class="header">
+      <a class="wordmark" href="./" aria-label="dot-real ホーム"><span class="mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>dot-real<span class="version">BETA / 01</span></a>
+      <div class="header-right"><span class="local-label"><i></i> ON YOUR DEVICE</span><button id="help" class="text-button">使い方 <span aria-hidden="true">↗</span></button></div>
+    </header>
+    <main>
+      <section class="heading"><div><p class="eyebrow">A LITTLE LESS REAL. A LITTLE MORE PLAY.</p><h1>現実に、<span>ドット</span>を。</h1><p class="lead">目の前のひとかけらを、ゲームの世界に。</p></div><div class="edition" aria-hidden="true">REALITY<br><span>→ PIXELS</span><small>EXPERIMENT Nº 001</small></div></section>
+      <div id="error" class="error" role="alert" hidden><span id="error-message"></span><button id="dismiss-error" aria-label="エラーを閉じる">×</button></div>
+      <div class="workspace">
+        <section class="camera-panel" aria-label="カメラ">
+          <div class="view-header"><span id="source-label"><i class="status-dot"></i> READY TO EXPLORE</span><span class="view-meta"><span id="fps">—</span> FPS <span class="separator">/</span> LIVE CANVAS</span></div>
+          <div class="view" id="view">
+            <canvas id="preview" width="640" height="480" tabindex="0" role="img" aria-label="プレビュー。物体をタップ、またはスペースキーで中央を選択" data-selected="false"></canvas>
+            <canvas id="overlay" width="640" height="480" aria-hidden="true"></canvas>
+            <div class="intro" id="intro"><div class="intro-tag">YOUR WORLD, REIMAGINED.</div><div class="pixel-symbol" aria-hidden="true">✳</div><p class="intro-title">いつもの景色に、<br>ちょっとしたバグを。</p><p class="intro-copy">カメラを開いて、物体をタップ。<br>選んだものだけ、ドット絵になります。</p><button id="camera-start" class="button primary"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h4l2-3h4l2 3h4v14H4z"/><circle cx="12" cy="12" r="4"/></svg>カメラをはじめる <span>↗</span></button><button id="demo-start" class="demo-button">カメラなしでデモを試す <span>→</span></button><small>映像はアップロードされません</small></div>
+            <div id="starting" class="starting" hidden><span class="spinner"></span><p>カメラを準備しています</p><small>許可ダイアログをご確認ください</small></div>
+            <div class="live-top" id="live-top" hidden><span class="live-pill" id="track-state">SELECT A TARGET</span><span class="live-pill subtle" id="demo-label" hidden>合成シーン / AI未使用</span></div>
+            <div class="hint" id="hint" hidden>ドットにしたい物体をタップ</div>
+          </div>
+          <div class="view-toolbar"><p id="status-detail" aria-live="polite">01 <span>カメラを開く。気になるものを選ぶ。</span></p><div class="tool-actions"><button id="clear" class="icon-button" disabled title="選択を解除" aria-label="選択を解除"><svg viewBox="0 0 24 24"><path d="M4 10a8 8 0 1 1 1 8M4 4v6h6"/></svg></button><button id="flip" class="icon-button" disabled title="カメラを切り替え" aria-label="カメラを切り替え"><svg viewBox="0 0 24 24"><path d="M5 7h14v12H5zM9 7l1-3h4l1 3M8 12h8m-2-2 2 2-2 2M10 15l-2-2 2-2"/></svg></button><button id="stop" class="icon-button" disabled title="停止" aria-label="停止"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1"/></svg></button></div></div>
+        </section>
+        <aside class="controls" aria-label="ドット絵の設定">
+          <div class="controls-title"><h2>YOUR PIXEL RECIPE</h2><span aria-hidden="true">✳</span></div>
+          <section class="control-section"><div class="label-row"><h3>選び方</h3><span>01</span></div><div class="mode-switch"><label><input type="radio" name="mode" value="ai" checked><span>タップで選ぶ <small>AI</small></span></label><label><input type="radio" name="mode" value="manual"><span>枠で選ぶ</span></label></div><p class="control-note" id="model-status">カメラ起動時にAIを読み込みます。</p><button id="retry-ai" class="retry" hidden>AIの読み込みを再試行 ↻</button></section>
+          <section class="control-section"><div class="label-row"><h3>カラーパレット</h3><span>02</span></div><div class="palettes">
+            <button class="palette" data-palette="color" aria-pressed="true"><span class="swatches color"><i></i><i></i><i></i><i></i></span><span>COLOR<small>64 colors</small></span></button>
+            <button class="palette" data-palette="gameboy" aria-pressed="false"><span class="swatches gameboy"><i></i><i></i><i></i><i></i></span><span>POCKET<small>4 colors</small></span></button>
+            <button class="palette" data-palette="mono" aria-pressed="false"><span class="swatches mono"><i></i><i></i><i></i><i></i></span><span>MONO<small>4 colors</small></span></button>
+            <button class="palette" data-palette="candy" aria-pressed="false"><span class="swatches candy"><i></i><i></i><i></i><i></i></span><span>CANDY<small>16 colors</small></span></button>
+          </div></section>
+          <section class="control-section"><div class="label-row"><h3><label for="block-size">ドットの粗さ</label></h3><output id="block-value" for="block-size">10 PX</output></div><input id="block-size" type="range" min="4" max="24" step="2" value="10"><div class="range-labels"><span>こまかい</span><span>あらい</span></div><label class="checkbox"><input id="outline" type="checkbox" checked><span>くっきりした輪郭</span><span class="switch" aria-hidden="true"></span></label></section>
+          <div class="export-section"><button id="save" class="button save" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M4 16v5h16v-5"/></svg>この瞬間を保存 <span>PNG</span></button><button id="compare" class="compare" disabled aria-pressed="false">押している間、元の映像を見る</button></div>
+        </aside>
+      </div>
+      <section class="footnotes" aria-label="注意事項"><p><span class="foot-icon" aria-hidden="true">⌁</span>映像の処理は、あなたの端末の中で。</p><p>速い動きや隠れた物体は苦手です。<br class="mobile-break">見失ったら、もう一度タップ。</p></section>
+    </main>
+    <footer><span>dot-real <span class="muted">/</span> SMALL EXPERIMENTS WITH REALITY.</span><a href="https://github.com/yurashu2-droid/dot-real" target="_blank" rel="noopener noreferrer">GitHub ↗</a></footer>
+  </div>
+  <video id="camera-video" autoplay muted playsinline hidden></video>
+  <dialog id="help-dialog"><button id="help-close" class="dialog-close" aria-label="使い方を閉じる">×</button><p class="eyebrow">HOW TO PLAY</p><h2>日常を、ちょっとだけ変える。</h2><p>カメラを許可して、背景と区別しやすい物体の中央をタップ。ドット絵になったら、ゆっくり動かしてみてください。</p><h3>AIが読み込めないときは</h3><p>「枠で選ぶ」に切り替えて、対象をドラッグで囲みます。このモードは四角い範囲を加工し、物体の輪郭は自動で切り抜きません。</p><h3>デモについて</h3><p>デモは合成のロケットです。最初の輪郭はあらかじめ分かっている形を使いますが、その後の追従とドット化はカメラと同じ処理を使います。AIの切り抜き精度を示すものではありません。</p><h3>プライバシーと対応環境</h3><p>映像の送信・保存・解析用サーバーはありません。初回のAI読込時のみ、jsDelivrとGoogleからプログラムとモデルを取得します。カメラはHTTPSまたはlocalhostで、最新のSafari / Chromeをお使いください。端末により速度と対応状況が異なります。</p><p>隠れた物体の再認識・3D空間への固定には対応していません。画面を閉じる、別タブへ移る、停止を押すとカメラを終了します。</p><p class="dialog-shortcuts">Space：中央を選択 / Escape：選択解除<br>「元の映像を見る」はマウス・タッチ・スペースキーの長押しに対応。</p><a href="./THIRD_PARTY_NOTICES.md">OSS・モデルの出典</a></dialog>
+  <div id="toast" class="toast" role="status" hidden></div>
+  <script type="module" src="./src/app.js"></script>
+</body>
+</html>

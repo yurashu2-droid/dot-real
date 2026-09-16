@@ -1,0 +1,9 @@
+node_modules/
+dist/
+assets/vendor/
+.worktrees/
+test-results/
+__pycache__/
+.DS_Store
+*.log
+assets/vendor.staging/
